@@ -19,14 +19,14 @@ data <- read_excel("XLSX/DatosLimpios.xlsx")
 #
 #write_xlsx(correlacion,"XLSX/correlacion.xlsx")
 
-#EN CASO DE QUE LOS GASTOS DEL USUARIO NO SUPEREN EL 40% DE LOS INGRESOS ANUALES --> SE ACEPTA AUTOMATICAMENTE aunque se estudia la media de los candidatos
+#EN CASO DE QUE LOS GASTOS DEL USUARIO NO SUPEREN EL 30% DE LOS INGRESOS ANUALES --> SE ACEPTA AUTOMATICAMENTE aunque se estudia la media de los candidatos
 
-filtro = data$AMT_CREDIT/data$AMT_CREDIT_YEARS + data$AMT_ANNUITY < data$AMT_INCOME_TOTAL * 0.4 
+filtro = data$AMT_CREDIT/data$AMT_CREDIT_YEARS + data$AMT_ANNUITY < data$AMT_INCOME_TOTAL * 0.3 
 aceptados1 = data[filtro,]
 write_xlsx(aceptados1,"XLSX/Split/Aceptados1.xlsx")
 
-#EN CASO DE QUE LOS GASTOS DEL USUARIO SUPEREN EL 40% DE LOS INGRESOS ANUALES --> SE DENIEGA
-filtro = data$AMT_CREDIT/data$AMT_CREDIT_YEARS + data$AMT_ANNUITY >= data$AMT_INCOME_TOTAL * 0.4
+#EN CASO DE QUE LOS GASTOS DEL USUARIO SUPEREN EL 30% DE LOS INGRESOS ANUALES --> SE DENIEGA
+filtro = data$AMT_CREDIT/data$AMT_CREDIT_YEARS + data$AMT_ANNUITY >= data$AMT_INCOME_TOTAL * 0.3
 casosEstudio = data[filtro,]
 
 #CLIENTES A LOS QUE SE LES DENIEGA EL CREDITO AUTOMATICAMENTE
@@ -167,27 +167,10 @@ aceptados = rbind(aceptados1,aceptados2,aceptados3,aceptados4,aceptados5,aceptad
 write_xlsx(aceptados,"XLSX/Split/Aceptados.xlsx")
 
 data = rbind(denegados,aceptados)
-write_xlsx(aceptados,"XLSX/Split/DataProcesado.xlsx")
+write_xlsx(data,"XLSX/Split/DataProcesado.xlsx")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# The most basic barplot you can do:
+prov = as.data.frame(table(data$STATE))
+barplot(height=prov$Freq, names=prov$Var1, col="#69b3a2")
 
