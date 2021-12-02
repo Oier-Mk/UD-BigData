@@ -5,7 +5,9 @@ library("ggplot2")
 data <- read_excel("XLSX/DatosLimpios.xlsx")
 #data <- read_excel("XLSX/Prueba.xlsx")
 
-enteros = data.frame(data$TARGET,	data$CODE_GENDER,	data$CNT_CHILDREN,	data$AMT_INCOME_TOTAL,	data$AMT_CREDIT,	data$AMT_ANNUITY,	data$AMT_GOODS_PRICE,	data$REGION_POPULATION_RELATIVE,	data$DAYS_BIRTH,	data$DAYS_EMPLOYED,	data$DAYS_REGISTRATION,	data$DAYS_ID_PUBLISH,	data$OWN_CAR_AGE,	data$FLAG_EMP_PHONE,	data$FLAG_WORK_PHONE,	data$FLAG_CONT_MOBILE,	data$FLAG_PHONE,	data$FLAG_EMAIL,	data$CNT_FAM_MEMBERS,	data$REGION_RATING_CLIENT,	data$HOUR_APPR_PROCESS_START,	data$APARTMENTS_AVG,	data$DEF_CNT_SOCIAL_CIRCLE,	data$DAYS_LAST_PHONE_CHANGE,	data$AMT_REQ_CREDIT_BUREAU)
+
+
+enteros = data.frame(data$TARGET,	data$CODE_GENDER,	data$CNT_CHILDREN,	data$AMT_INCOME_TOTAL, data$AMT_CREDIT_YEARS,	data$AMT_CREDIT,	data$AMT_ANNUITY,	data$AMT_GOODS_PRICE,	data$REGION_POPULATION_RELATIVE,	data$DAYS_BIRTH,	data$DAYS_EMPLOYED,	data$DAYS_REGISTRATION,	data$DAYS_ID_PUBLISH,	data$OWN_CAR_AGE,	data$FLAG_EMP_PHONE,	data$FLAG_WORK_PHONE,	data$FLAG_CONT_MOBILE,	data$FLAG_PHONE,	data$FLAG_EMAIL,	data$CNT_FAM_MEMBERS,	data$REGION_RATING_CLIENT,	data$HOUR_APPR_PROCESS_START,	data$APARTMENTS_AVG,	data$DEF_CNT_SOCIAL_CIRCLE,	data$DAYS_LAST_PHONE_CHANGE,	data$AMT_REQ_CREDIT_BUREAU)
 
 summary(enteros)
 
@@ -16,11 +18,11 @@ correlacion = as.data.frame(t(correlacion))
 
 summary(correlacion)
 
-#write_xlsx(correlacion,"XLSX/correlacion.xlsx")
+write_xlsx(correlacion,"XLSX/correlacion.xlsx")
 
 #EN CASO DE QUE LOS GASTOS DEL USUARIO NO SUPEREN EL 40% DE LOS INGRESOS ANUALES --> SE ACEPTA AUTOMATICAMENTE aunque se estudia la media de los candidatos
 
-filtro = data$AMT_CREDIT < data$AMT_INCOME_TOTAL * 0.4
+filtro = data$AMT_CREDIT/data$AMT_CREDIT_YEARS + data$AMT_ANNUITY < data$AMT_INCOME_TOTAL * 0.4 
 aceptados1 = data[filtro,]
 write_xlsx(aceptados1,"XLSX/Split/Aceptados1.xlsx")
 
