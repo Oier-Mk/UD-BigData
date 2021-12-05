@@ -12,33 +12,45 @@ library("readxl")
 library("writexl")
 library("ggplot2")
 
-denegados <- read_excel("DatosParaMostrar/Denegados.xlsx")
-aceptados <- read_excel("DatosParaMostrar/Aceptados.xlsx")
-estudiar <- read_excel("DatosParaMostrar/AEstudiar.xlsx")
+data <- read_excel("DatosParaMostrar/DataProcesado.xlsx")
+aceptados <- data[data$STATE == TRUE,]
+denegados <- data[data$STATE == FALSE,]
 
 # Define UI for application that draws a histogram
 library(shiny)
 
 ui <- fluidPage(
   titlePanel("Basic widgets"),
-  actionButton("tdt", "Pieplot con tipos de trabajo"),
-  actionButton("go", "Pieplot con tipos de trabajo"),
+  actionButton("tiposCantidad", "Tipos de trabajo con cantidad solicitada"),
+  actionButton("aIteracionesCantidad", "Aceptados en cada iteracion con cantidad solicitada"),
 )
 
 server <- function(input, output) {
   
-  output$pieplot <- renderPlot({
-    pie(table(aceptados$NAME_EDUCATION_TYPE))
+  output$tiposCantidad <- renderPlot({
+    ggplot(data,aes(x=NAME_EDUCATION_TYPE,y=AMT_CREDIT))+geom_boxplot()
+  })
+  observeEvent(
+    input$tiposCantidad, {
+      showModal(modalDialog(
+        plotOutput("tiposCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
   })
   
-  observeEvent(
-    input$tdt, {
-    showModal(modalDialog(
-      plotOutput("pieplot"),
-      footer = NULL,
-      easyClose = TRUE
-    ))
+  
+  output$aIteracionesCantidad <- renderPlot({
+    ggplot(aceptados,aes(x=ITERATION,y=AMT_CREDIT))+geom_boxplot()
   })
+  observeEvent(
+    input$aIteracionesCantidad, {
+      showModal(modalDialog(
+        plotOutput("aIteracionesCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
 }
 
 shinyApp(ui, server)

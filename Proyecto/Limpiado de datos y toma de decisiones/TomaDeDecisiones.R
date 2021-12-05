@@ -144,20 +144,33 @@ aceptados7 = casosEstudio[filtro,]
 
 casosEstudio = NULL
 
-aceptados1$STATE = "A1"
-aceptados2$STATE = "A2"
-aceptados3$STATE = "A3"
-aceptados4$STATE = "A4"
-aceptados5$STATE = "A5"
-aceptados6$STATE = "A6"
-aceptados7$STATE = "A7"
+aceptados1$STATE = TRUE
+aceptados1$ITERATION = 1
+aceptados2$STATE = TRUE
+aceptados2$ITERATION = 2
+aceptados3$STATE = TRUE
+aceptados3$ITERATION = 3
+aceptados4$STATE = TRUE
+aceptados4$ITERATION = 4
+aceptados5$STATE = TRUE
+aceptados5$ITERATION = 5
+aceptados6$STATE = TRUE
+aceptados6$ITERATION = 6
+aceptados7$STATE = TRUE
+aceptados7$ITERATION = 7
 
-denegados1$STATE = "D1"
-denegados2$STATE = "D2"
-denegados3$STATE = "D3"
-denegados4$STATE = "D4"
-denegados5$STATE = "D5"
-denegados6$STATE = "D6"
+denegados1$STATE = FALSE
+denegados1$ITERATION = 1
+denegados2$STATE = FALSE
+denegados2$ITERATION = 2
+denegados3$STATE = FALSE
+denegados3$ITERATION = 3
+denegados4$STATE = FALSE
+denegados4$ITERATION = 4
+denegados5$STATE = FALSE
+denegados5$ITERATION = 5
+denegados6$STATE = FALSE
+denegados6$ITERATION = 6
 
 
 denegados = rbind(denegados1,denegados2,denegados3,denegados4,denegados5,denegados6)
@@ -168,9 +181,4 @@ write_xlsx(aceptados,"XLSX/Split/Aceptados.xlsx")
 
 data = rbind(denegados,aceptados)
 write_xlsx(data,"XLSX/Split/DataProcesado.xlsx")
-
-
-# The most basic barplot you can do:
-prov = as.data.frame(table(data$STATE))
-barplot(height=prov$Freq, names=prov$Var1, col="#69b3a2")
 
