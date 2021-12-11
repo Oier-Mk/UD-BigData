@@ -23,12 +23,13 @@ ui <- fluidPage(
   titlePanel("Basic widgets"),
   actionButton("tiposCantidad", "Tipos de trabajo con cantidad solicitada"),
   actionButton("aIteracionesCantidad", "Aceptados en cada iteracion con cantidad solicitada"),
+  actionButton("dIteracionesCantidad", "Denegados en cada iteracion con cantidad solicitada"),
 )
 
 server <- function(input, output) {
   
   output$tiposCantidad <- renderPlot({
-    ggplot(data,aes(x=NAME_EDUCATION_TYPE,y=AMT_CREDIT))+geom_boxplot()
+    ggplot(data,aes(x=NAME_INCOME_TYPE,y=AMT_CREDIT))+geom_boxplot()
   })
   observeEvent(
     input$tiposCantidad, {
@@ -41,7 +42,11 @@ server <- function(input, output) {
   
   
   output$aIteracionesCantidad <- renderPlot({
-    ggplot(aceptados,aes(x=ITERATION,y=AMT_CREDIT))+geom_boxplot()
+    ggplot(aceptados, aes(x=ITERATION, fill=ITERATION )) + 
+      geom_bar( ) +
+      scale_fill_brewer(palette = "Set1") +
+      theme(legend.position="none")
+    
   })
   observeEvent(
     input$aIteracionesCantidad, {
@@ -51,7 +56,26 @@ server <- function(input, output) {
         easyClose = TRUE
       ))
     })
+  
+  
+  output$dIteracionesCantidad <- renderPlot({
+    ggplot(denegados, aes(x=ITERATION, fill=ITERATION )) + 
+      geom_bar( ) +
+      scale_fill_brewer(palette = "Set1") +
+      theme(legend.position="none")
+    
+  })
+  observeEvent(
+    input$dIteracionesCantidad, {
+      showModal(modalDialog(
+        plotOutput("dIteracionesCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
 }
+
+
 
 shinyApp(ui, server)
 
