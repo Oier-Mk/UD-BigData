@@ -22,8 +22,9 @@ library(shiny)
 ui <- fluidPage(
   titlePanel("Basic widgets"),
   actionButton("tiposCantidad", "Tipos de trabajo con cantidad solicitada"),
-  actionButton("aIteracionesCantidad", "Aceptados en cada iteracion con cantidad solicitada"),
-  actionButton("dIteracionesCantidad", "Denegados en cada iteracion con cantidad solicitada"),
+  actionButton("aIteracionesCantidad", "Aceptados en cada iteracion"),
+  actionButton("dIteracionesCantidad", "Denegados en cada iteracion"),
+  actionButton("piramide", "piramide"),
 )
 
 server <- function(input, output) {
@@ -73,6 +74,34 @@ server <- function(input, output) {
         easyClose = TRUE
       ))
     })
+  
+  output$piramide <- renderPlot({
+    data <- data.frame(
+      var1 = rnorm(aceptados),
+      var2 = rnorm(denegados)
+    )
+    
+    # Chart
+    ggplot(data, aes(x=x) ) +
+      # Top
+      geom_density( aes(x = var1, y = ..density..), fill="#69b3a2" ) +
+      geom_label( aes(x=4.5, y=0.25, label="variable1"), color="#69b3a2") +
+      # Bottom
+      geom_density( aes(x = var2, y = -..density..), fill= "#404080") +
+      geom_label( aes(x=4.5, y=-0.25, label="variable2"), color="#404080") +
+      theme_ipsum() +
+      xlab("value of x")
+  })
+  observeEvent(
+    input$piramide, {
+      showModal(modalDialog(
+        plotOutput("piramide"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
+  
+  
 }
 
 

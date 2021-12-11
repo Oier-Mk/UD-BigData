@@ -182,4 +182,5 @@ write_xlsx(aceptados,"XLSX/Split/Aceptados.xlsx")
 
 data = rbind(denegados,aceptados)
 write_xlsx(data,"XLSX/Split/DataProcesado.xlsx")
+write_xlsx(data,"/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/DataProcesado.xlsx")
 
