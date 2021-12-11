@@ -141,6 +141,7 @@ write_xlsx(denegados6,"XLSX/Split/Denegados6.xlsx")
 #SI ANTERIORMENTE NO HA FIGURADO COMO MOROSO SE ACEPTA
 filtro = casosEstudio$TARGET == 1
 aceptados7 = casosEstudio[filtro,]
+write_xlsx(aceptados7,"XLSX/Split/Aceptados7.xlsx")
 
 casosEstudio = NULL
 
