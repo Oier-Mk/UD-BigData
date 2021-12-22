@@ -13,6 +13,8 @@ library("writexl")
 library("ggplot2")
 
 
+
+
 iteraciones <- read_excel("DatosParaMostrar/Iteraciones.xlsx")
 data <- read_excel("DatosParaMostrar/DataProcesado.xlsx")
 aceptados <- data[data$STATE == TRUE,]
@@ -79,7 +81,20 @@ ui <- navbarPage("Concesión de créditos",
                           plotOutput("both"),
                           "Ninguno...",
                           plotOutput("none"),
+                 ),
+                 tabPanel("EdadCantidad",
+                          plotOutput("edadCantidad"),
+                 ),
+                 tabPanel("estatusCredito",
+                          plotOutput("estatusCredito"),
+                 ),
+                 tabPanel("cantidadDiasTrabajados",
+                          plotOutput("cantidadDiasTrabajados"),
+                          plotOutput("sueldoDiasTrabajados"),
                  )
+              
+                 
+                 
 )      
 
 
@@ -185,6 +200,31 @@ server <- function(input, output) {
   
   output$summary <- renderPrint({
     summary(data)
+  })
+  
+  
+  output$edadCantidad <- renderPlot({
+    ggplot(data, aes(x=DAYS_BIRTH, y=AMT_CREDIT)) +
+    geom_point() +
+    geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) 
+  })
+  
+  output$estatusCredito <- renderPlot({
+    ggplot(data, aes(x=NAME_FAMILY_STATUS, y=AMT_CREDIT)) +
+      geom_point() +
+      geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) 
+  })
+  
+  output$cantidadDiasTrabajados <- renderPlot({
+    ggplot(data, aes(x=DAYS_EMPLOYED, y=AMT_CREDIT)) +
+      geom_point() +
+      geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) 
+  })
+  
+  output$sueldoDiasTrabajados <- renderPlot({
+    ggplot(data, aes(x=DAYS_EMPLOYED, y=AMT_INCOME_TOTAL)) +
+      geom_point() +
+      geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) 
   })
   
 }

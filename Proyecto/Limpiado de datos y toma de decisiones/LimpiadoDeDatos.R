@@ -149,6 +149,14 @@ data$DEF_60_CNT_SOCIAL_CIRCLE = NULL
 
 data$AMT_GOODS_PRICE[is.na(data$AMT_GOODS_PRICE)] = 0 
 
+data$DAYS_BIRTH = data$DAYS_BIRTH/365*-1
+data$DAYS_BIRTH = as.integer(data$DAYS_BIRTH)
+
+data$DAYS_EMPLOYED = data$DAYS_EMPLOYED/365*-1
+data$DAYS_EMPLOYED = as.integer(data$DAYS_EMPLOYED)
+
+
+
 summary(data)
 
 write_xlsx(data,"XLSX/DatosLimpios.xlsx")
