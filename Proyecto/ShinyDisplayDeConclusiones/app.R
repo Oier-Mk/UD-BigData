@@ -24,7 +24,7 @@ library(shiny)
 ui <- navbarPage("Concesión de créditos",
                  tabPanel("Concesión de créditos",
                           titlePanel("Concesión de créditos\n"),
-                          imageOutput("logo"), align =  "Center"
+                          #imageOutput("logo"), align =  "Center"
                  ),
                  tabPanel("Criterios para la concesión",
                           h3("1. El caso en el que los gastos del usuario no superen el 30% de los ingresos anuales."),
@@ -59,14 +59,18 @@ ui <- navbarPage("Concesión de créditos",
                           plotOutput("tiposCantidad"),
                           actionButton(verbatimTextOutput("summaryTiposCantidad"),"Summary")
                  ),
-                 tabPanel("TiposCantidadEstado", 
+                 tabPanel("TiposCantidadAceptado",
+                          plotOutput("tiposCantidad1"),
                           plotOutput("tiposCantidadAceptado"),
+                 ),
+                 tabPanel("TiposCantidadDenegado",
+                          plotOutput("tiposCantidad2"),
                           plotOutput("tiposCantidadDenegado"),
                  ),
                  tabPanel("IteracionesCantidad",
                           plotOutput("iteracionesCantidad"),
                  ),
-                 tabPanel("Prueba",
+                 tabPanel("Avales",
                           "Clientes con coche...",
                           plotOutput("car"),
                           "Clientes con casa...",
@@ -104,7 +108,7 @@ server <- function(input, output) {
   
   output$iteracionesCantidad = renderPlot({
     # Stacked barplot with multiple groups
-    ggplot(iteraciones, aes(x=iteraciones$ITERACION, y=iteraciones$CTD, fill=iteraciones$EST)) +
+    ggplot(iteraciones, aes(x=ITERACION, y=CTD, fill=EST)) +
       xlab("Iteración") + ylab("Cantidad") + scale_fill_brewer(palette="Paired")+ 
       geom_bar(stat="identity")
 
@@ -127,6 +131,28 @@ server <- function(input, output) {
     input$tiposCantidad, {
       showModal(modalDialog(
         plotOutput("tiposCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
+  output$tiposCantidad1 <- renderPlot({
+    ggplot(data,aes(x=NAME_INCOME_TYPE,y=AMT_CREDIT)) +ggtitle("ORIGINAL")+ geom_violin(trim=FALSE, fill='#A4A4A4', color="darkred") + geom_boxplot(width=0.1) + theme_minimal()
+  })
+  observeEvent(
+    input$tiposCantidad1, {
+      showModal(modalDialog(
+        plotOutput("tiposCantidad1"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
+  output$tiposCantidad2 <- renderPlot({
+    ggplot(data,aes(x=NAME_INCOME_TYPE,y=AMT_CREDIT)) +ggtitle("ORIGINAL")+ geom_violin(trim=FALSE, fill='#A4A4A4', color="darkred") + geom_boxplot(width=0.1) + theme_minimal()
+  })
+  observeEvent(
+    input$tiposCantidad2, {
+      showModal(modalDialog(
+        plotOutput("tiposCantidad2"),
         footer = NULL,
         easyClose = TRUE
       ))
