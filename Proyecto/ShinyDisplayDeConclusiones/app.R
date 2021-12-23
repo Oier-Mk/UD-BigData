@@ -24,9 +24,10 @@ denegados <- data[data$STATE == FALSE,]
 library(shiny)
 
 ui <- navbarPage("Concesión de créditos",
+                 
                  tabPanel("Concesión de créditos",
                           titlePanel("Concesión de créditos\n"),
-                          #imageOutput("logo"), align =  "Center"
+                          imageOutput("logo"), align =  "Center",
                  ),
                  tabPanel("Criterios para la concesión",
                           h3("1. El caso en el que los gastos del usuario no superen el 30% de los ingresos anuales."),
@@ -36,8 +37,8 @@ ui <- navbarPage("Concesión de créditos",
                           p("1. Si el valor de tasación es inferior al 80% del valor de tasación -> se acepta."),
                           p("2. Si el valor de tasación NO es inferior al 80% del valor de tasación -> se estudia."),
                           h3("3. El caso en el que se tengan propiedades para poder avalar el crédito en caso de impago."),
-                          p("1. Si NO se tiene un inmueble con el que poder avalar -> se estudia."),
-                          p("2. Si se tiene un inmueble con el que poder avalar -> se acepta."),
+                          p("1. Si se tiene un inmueble con el que poder avalar -> se estudia."),
+                          p("2. Si NO se tiene un inmueble con el que poder avalar -> se deniega."),
                           h3("4. El caso en el que se tengan hijos o no a su cargo."),
                           p("1. Si se tienen hijos -> se estudia."),
                           p("2. Si NO se tienen hijos -> se acepta."),
@@ -57,9 +58,11 @@ ui <- navbarPage("Concesión de créditos",
                           p("1. Si se ha sido moroso -> se deniega."),
                           p("2. Si NO se ha sido moroso -> se acepta.")
                  ),
+                 tabPanel("Esquema de criterios",
+                          imageOutput("esquema"), align =  "Center",
+                 ),
                  tabPanel("TiposCantidad", 
                           plotOutput("tiposCantidad"),
-                          actionButton(verbatimTextOutput("summaryTiposCantidad"),"Summary")
                  ),
                  tabPanel("TiposCantidadAceptado",
                           plotOutput("tiposCantidad1"),
@@ -70,7 +73,9 @@ ui <- navbarPage("Concesión de créditos",
                           plotOutput("tiposCantidadDenegado"),
                  ),
                  tabPanel("IteracionesCantidad",
-                          plotOutput("iteracionesCantidad"),
+                          plotOutput("aIteracionesCantidad"),
+                          plotOutput("dIteracionesCantidad"),
+                          align =  "Center",
                  ),
                  tabPanel("Avales",
                           "Clientes con coche...",
@@ -135,6 +140,16 @@ server <- function(input, output) {
         src = "/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/image/Inicio.png",
         contentType = "image/png",
         alt = "bank logo"
+      )
+    )
+  })
+  
+  output$esquema <- renderImage({
+    return(
+      list(
+        src = "/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/image/Iteraciones.png",
+        contentType = "image/png",
+        alt = "esquema"
       )
     )
   })
@@ -226,6 +241,38 @@ server <- function(input, output) {
       geom_point() +
       geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) 
   })
+  output$aIteracionesCantidad <- renderPlot({
+    ggplot(aceptados, aes(x=ITERATION, fill=ITERATION )) + 
+      geom_bar( ) +
+      scale_fill_brewer(palette = "Set1") +
+      theme(legend.position="none")
+    
+  })
+  observeEvent(
+    input$aIteracionesCantidad, {
+      showModal(modalDialog(
+        plotOutput("aIteracionesCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
+  
+  
+  output$dIteracionesCantidad <- renderPlot({
+    ggplot(denegados, aes(x=ITERATION, fill=ITERATION )) + 
+      geom_bar( ) +
+      scale_fill_brewer(palette = "Set1") +
+      theme(legend.position="none")
+    
+  })
+  observeEvent(
+    input$dIteracionesCantidad, {
+      showModal(modalDialog(
+        plotOutput("dIteracionesCantidad"),
+        footer = NULL,
+        easyClose = TRUE
+      ))
+    })
   
 }
 
