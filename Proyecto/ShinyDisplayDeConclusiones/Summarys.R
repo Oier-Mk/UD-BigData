@@ -50,3 +50,9 @@ p <- ggplot(data, aes(x=x) ) +
 
 p
 
+filtro = data$NAME_INCOME_TYPE == "Commercial associate"
+summary(data$AMT_CREDIT)
+filtro = aceptados$NAME_INCOME_TYPE == "Commercial associate"
+summary(aceptados$AMT_CREDIT)
+filtro = denegados$NAME_INCOME_TYPE == "Commercial associate"
+summary(denegados$AMT_CREDIT)
