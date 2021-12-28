@@ -96,6 +96,10 @@ ui <- navbarPage("Concesión de créditos",
                  tabPanel("cantidadDiasTrabajados",
                           plotOutput("cantidadDiasTrabajados"),
                           plotOutput("sueldoDiasTrabajados"),
+                 ),
+                 tabPanel("Rendimiento",
+                          titlePanel("¿Qué rendimiento económico se puede sacar a este dataset?"),
+                          imageOutput("rendimiento"), align =  "Center",
                  )
               
                  
@@ -118,12 +122,12 @@ server <- function(input, output) {
   output$both = renderPlot({
     data$both = is.na(data$APARTMENTS_AVG) & is.na(data$OWN_CAR_AGE) 
     table(data$both)
-    barplot( height=table(data$both), density=c(5,10,20,30,7) , angle=c(0,45,90,11,36) , col="brown", names.arg=c("Tiene propiedades y coche","No tiene propiedades y coche")     )
+    barplot( height=table(data$both), density=c(5,10,20,30,7) , angle=c(0,45,90,11,36) , col="brown", names.arg=c("Tiene propiedades o coche","$ No tiene ni propiedades ni coche $")     )
   })
   output$none = renderPlot({
     data$none = !is.na(data$APARTMENTS_AVG) & !is.na(data$OWN_CAR_AGE) 
     table(data$none)
-    barplot( height=table(data$none), density=c(5,10,20,30,7) , angle=c(0,45,90,11,36) , col="brown", names.arg=c("Tiene propiedades y coche","No tiene ni propiedades ni coche")     )
+    barplot( height=table(data$none), density=c(5,10,20,30,7) , angle=c(0,45,90,11,36) , col="brown", names.arg=c("Tiene propiedades o coche"," $ Tiene propiedades y coche $")     )
   })
   
   output$iteracionesCantidad = renderPlot({
@@ -138,6 +142,7 @@ server <- function(input, output) {
     return(
       list(
         src = "/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/image/Inicio.png",
+        #src = "/DatosParaMostrar/image/Inicio.png",
         contentType = "image/png",
         alt = "bank logo"
       )
@@ -148,8 +153,20 @@ server <- function(input, output) {
     return(
       list(
         src = "/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/image/Iteraciones.png",
+        #src = "/DatosParaMostrar/image/Iteraciones.png",
         contentType = "image/png",
         alt = "esquema"
+      )
+    )
+  })
+  
+  output$rendimiento <- renderImage({
+    return(
+      list(
+        src = "/Users/mentxaka/Documents/Universidad De Deusto/2021-22/1er Semestre/Big Data y Business Intelligence/Proyecto/ShinyDisplayDeConclusiones/DatosParaMostrar/image/rendimiento.png",
+        #src = "/DatosParaMostrar/image/rendimiento.png",
+        contentType = "image/png",
+        alt = "rendimiento"
       )
     )
   })
